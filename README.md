@@ -4,7 +4,7 @@ AARA is a pre-therapy and therapy companion that turns daily experiences into cl
 
 ## 🚫 What AARA is NOT
 
-Let’s be strict here (this builds trust):
+Let’s be strict here :
 
 - ❌ **Not a therapist**
 - ❌ **Not a diagnosis tool**

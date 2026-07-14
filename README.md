@@ -1,310 +1,123 @@
-# AARA Prep - AI Therapist Platform
+# AARA Prep
 
-## Project Status
+An open-source pre-therapy and therapy companion for turning everyday experiences into clear, consent-based insights.
 
-AARA Prep is an open-source project under active development. The repository is organized to make the project easier to understand, run locally, and contribute to.
+AARA Prep helps people organize check-ins, journals, and reflections before or between professional sessions. It is software for personal organization and communication—not a replacement for professional care.
 
-- [Contributing guide](CONTRIBUTING.md)
-- [Roadmap](ROADMAP.md)
-- [Security policy](SECURITY.md)
-- [Code of conduct](CODE_OF_CONDUCT.md)
-- [Changelog](CHANGELOG.md)
+## Project status
 
-> AARA Prep is not a therapist, diagnosis tool, medical-advice service, or crisis-care service. It is intended to support—not replace—qualified professional care.
+AARA Prep is under active development. Core product areas include authentication, check-ins, journaling, AI-assisted conversation, insights, reports, and therapist-oriented sharing workflows. Interfaces and integrations may change as the project is stabilized.
 
-AARA is a pre-therapy and therapy companion that turns daily experiences into clear, shareable insights — so therapists understand users faster, and users feel understood. That’s it. No extra claims. No therapy replacement.
+Documentation: [Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md) · [Security](SECURITY.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Changelog](CHANGELOG.md)
 
-## 🚫 What AARA is NOT
+## Safety and privacy boundaries
 
-Let’s be strict here :
+AARA Prep is not a therapist, diagnosis tool, medical-advice service, or crisis-care service. If you are in immediate danger or experiencing a crisis, contact local emergency services or a qualified crisis resource.
 
-- ❌ **Not a therapist**
-- ❌ **Not a diagnosis tool**
-- ❌ **Not medical advice**
-- ❌ **Not crisis care**
+The project is built around explicit consent: private information should remain private unless a user intentionally chooses to use or share it. This repository does not make a guarantee of legal or regulatory compliance; deployment owners are responsible for their own security, privacy notices, retention, and compliance decisions.
 
-AARA never replaces human therapy. It supports it.
+## Features
 
-## 🧠 Core Philosophy
+- AI-assisted conversation with optional voice integrations
+- Daily check-ins and progressive reflection prompts
+- Private text and voice journaling
+- Mood, theme, and pattern insights across configurable time ranges
+- Reports for personal reflection or preparation for a professional session
+- Consent-based report sharing and read-only therapist views
+- Share revocation controls and optional PDF generation
+- Therapist discovery and booking integrations where configured
 
-**Nothing is connected by default. Everything is connected by consent.**
+## Architecture overview
 
-- Journals are private unless user opts in
-- Chat is summarized, not exposed
-- Reports are snapshots, not surveillance
+User → Check-in or journal entry → Consent and access controls → Insight processing → Report generation → Optional sharing
 
-## 🚀 Features
+The application is organized as a Next.js app with API routes, reusable React components, Firebase-backed authentication and data services, and optional integrations for AI, voice, payments, email, and analytics.
 
-### User Features
-- 🤖 **AI Therapy Chat** - Powered by OpenAI GPT-4 with voice input/output (Whisper + ElevenLabs)
-- 📝 **Daily Check-Ins** - Progressive emotional tracking with 24h frequency validation
-- 📖 **Private Journaling** - Voice and text entries with granular consent controls
-- 📊 **Insights Dashboard** - Real-time mood trends, themes, and patterns (7/30/90 day views)
-- 📄 **Shareable Reports** - Generate pre-therapy, therapy, or self-insight reports
-- 🎮 **Mental Wellness Games** - 5 interactive games for focus, calm, and mindfulness
-- 👨‍⚕️ **Therapist Booking** - Secure session booking with Stripe integration
+## Technology
 
-### Therapist Features
-- 📨 **Secure Report Sharing** - PDF download or private link with revocation
-- 👁️ **Read-Only Access** - View patient insights without data collection
-- 🔐 **Privacy-First** - All sharing requires explicit patient consent
+- Next.js 14, React 18, and TypeScript
+- Tailwind CSS and Framer Motion
+- Firebase Authentication, Firestore, and Realtime Database
+- OpenAI API for AI features
+- ElevenLabs for optional text-to-speech features
+- Stripe for optional payments
+- Puppeteer and jsPDF for document workflows
+- Vercel-compatible deployment configuration
 
-### Privacy & Security
-- ✅ **Consent-Based Processing** - No data used without explicit opt-in
-- 🔒 **Immutable Reports** - Reports locked after creation, journals processed once
-- 📜 **Full Audit Trail** - All consent actions logged with timestamps
-- 🗑️ **GDPR Compliant** - Right to deletion and data export
-- 🔐 **Firebase Auth** - Google and Email authentication
-
-## 🏗️ Backend Architecture (v1.0)
-
-### Data Flow
-```
-User → Check-In/Journal → Consent → Insight Processing → Report Generation → Sharing
-```
-
-### Core Services
-
-| Service | Purpose | Key Features |
-|---------|---------|--------------|
-| **User State** | Manages therapy journey stages | 4 states (exploration→preparing→in_therapy→maintenance) |
-| **Check-In** | Daily emotional tracking | 24h frequency rule, progressive depth |
-| **Consent** | Privacy-first data control | Granular opt-in, full audit trail |
-| **Insights** | Pattern detection | Theme extraction, emotional patterns, recurrence signals |
-| **Reports** | Clinical summaries | 3 types (pre-therapy, therapy, self-insight), immutable |
-| **Sharing** | Therapist access | Secure tokens, PDF generation (Puppeteer), revocation |
-
-### API Endpoints
-
-**User State:**
-- `GET /api/user/state` - Get current state and suggestions
-- `PATCH /api/user/state` - Update state (requires confirmation)
-
-**Check-Ins:**
-- `POST /api/check-in` - Submit daily check-in
-- `GET /api/check-in/latest` - Get latest check-in + `canCheckIn` status
-- `GET /api/check-in/level` - Get progressive question level
-
-**Insights:**
-- `GET /api/insights/current?days={7|30|90}` - Real-time insights
-
-**Reports:**
-- `POST /api/reports` - Generate new report
-- `GET /api/reports` - List user reports
-- `GET /api/reports/:id` - Get specific report
-
-**Sharing:**
-- `POST /api/reports/:id/share` - Create share (PDF or secure link)
-- `DELETE /api/reports/:id/share/:shareId` - Revoke share
-- `GET /api/share/:token` - Public therapist access (validates token)
-
-### Data Models
-
-See [`/lib/models/backend.ts`](file:///d:/aara%20website/Aara%20app/lib/models/backend.ts) for complete TypeScript interfaces.
-
-### Privacy Guarantees
-
-1. **No Processing Without Consent** - Journals are private by default
-2. **One-Time Processing** - Journals marked `processed` after first report inclusion
-3. **Report Immutability** - Reports locked (`locked: true`) immediately after creation
-4. **State Transitions** - All state changes require user confirmation
-5. **Share Revocation** - Users can revoke therapist access anytime
-
----
-
-## 🛠️ Tech Stack
-
-- **Frontend**: Next.js 14, React 18, TypeScript
-- **Styling**: Tailwind CSS, Framer Motion
-- **Backend**: Firebase (Auth, Firestore, Realtime DB)
-- **AI**: OpenAI GPT-4, Whisper (speech-to-text), ElevenLabs (text-to-speech)
-- **Payments**: Stripe
-- **Analytics**: Mixpanel (optional)
-- **Deployment**: Vercel
-
-## 📦 Installation
+## Getting started
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- Firebase project
-- OpenAI API key
-- Stripe account (optional, for payments)
-- ElevenLabs API key (optional, for voice features)
+- Node.js 18 or later
+- npm
+- A Firebase project for authentication and data features
+- An OpenAI API key for AI features
 
-### Setup
+Stripe, ElevenLabs, email, analytics, and deployment credentials are optional until you use the features that depend on them.
 
-1. **Clone the repository:**
-```bash
-git clone <repository-url>
-cd aara-therapist
-```
+### Install
 
-2. **Install dependencies:**
-```bash
-npm install
-```
+1. Clone the repository: `git clone https://github.com/Umar-frauq/Aara-Prep.git`
+2. Enter the project: `cd Aara-Prep`
+3. Install dependencies: `npm install`
 
-3. **Create `.env.local` file:**
-```bash
-cp .env.example .env.local
-```
+### Configure local environment variables
 
-4. **Fill in environment variables:**
-```env
-# Firebase Configuration
-NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id
-NEXT_PUBLIC_FIREBASE_DATABASE_URL=https://your_project_id-default-rtdb.firebaseio.com
+Create `.env.local` in the project root. Never commit this file or share its contents.
 
-# OpenAI Configuration
-OPENAI_API_KEY=your_openai_api_key
+Required or commonly used variables include `NEXT_PUBLIC_FIREBASE_API_KEY`, `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`, `NEXT_PUBLIC_FIREBASE_PROJECT_ID`, `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`, `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`, `NEXT_PUBLIC_FIREBASE_APP_ID`, `NEXT_PUBLIC_FIREBASE_DATABASE_URL`, and `OPENAI_API_KEY`.
 
-# Stripe Configuration (Optional)
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-STRIPE_SECRET_KEY=your_stripe_secret_key
-STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+Optional integrations use `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `ELEVENLABS_API_KEY`, `NEXT_PUBLIC_MIXPANEL_TOKEN`, and `SITE_URL`.
 
-# ElevenLabs API (Optional)
-ELEVENLABS_API_KEY=your_elevenlabs_api_key
+Use development credentials only. Do not place secrets in variables prefixed with `NEXT_PUBLIC_`; Next.js exposes those values to the browser.
 
-# Mixpanel Analytics (Optional)
-NEXT_PUBLIC_MIXPANEL_TOKEN=your_mixpanel_token
+### Run locally
 
-# Site URL (for sitemap)
-SITE_URL=https://your-domain.com
-```
+Start the development server with `npm run dev`, then open [http://localhost:3000](http://localhost:3000).
 
-5. **Run development server:**
-```bash
-npm run dev
-```
+## Firebase setup
 
-6. **Open browser:**
-Navigate to `http://localhost:3000`
+1. Create a Firebase project.
+2. Enable the sign-in methods your environment needs.
+3. Create a Firestore database and configure security rules.
+4. Enable Realtime Database if required by the features you use.
+5. Add the Firebase web-app values to `.env.local`.
+6. Test with non-production accounts before deployment.
 
-## 🔥 Firebase Setup
+Do not use permissive development rules in production. Review Firebase rules whenever a feature changes how user data is read, written, or shared.
 
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Create a new project
-3. Enable Authentication:
-   - Go to **Authentication > Sign-in method**
-   - Enable **Email/Password** and **Google**
-4. Create Firestore Database:
-   - Go to **Firestore Database**
-   - Create database in production mode
-   - Start in test mode (for development)
-5. Enable Realtime Database (optional, for real-time chat):
-   - Go to **Realtime Database**
-   - Create database
-6. Copy your Firebase config to `.env.local`
+## Quality checks
 
-## 📱 PWA Icons
+Run these checks before opening a pull request: `npm run lint`, `npm run typecheck`, and `npm run build`.
 
-Add PWA icons to `public/`:
-- `icon-192.png` (192x192px)
-- `icon-512.png` (512x512px)
+The build may require valid integration configuration because some application paths depend on Firebase or other external services.
 
-## 🏗️ Build for Production
+## Deployment
 
-```bash
-npm run build
-npm start
-```
+AARA Prep includes Vercel configuration. Import the repository into Vercel, configure environment variables in the Vercel project settings, configure Firebase authorized domains and production rules, and run a production smoke test with a test account.
 
-## 🚢 Deploy to Vercel
+Never copy `.env.local` into a public repository or paste credentials into issues, pull requests, logs, or screenshots.
 
-1. Push your code to GitHub
-2. Import project in [Vercel](https://vercel.com)
-3. Add all environment variables in Vercel dashboard
-4. Deploy!
+## Repository layout
 
-The project includes:
-- `vercel.json` configuration
-- Automatic sitemap generation
-- SEO optimization
-- PWA support
+- `app/` — Next.js pages, layouts, and API routes
+- `components/` — Reusable UI and product components
+- `context/` and `contexts/` — Shared state and providers
+- `functions/` — Backend and integration functions
+- `hooks/` — Reusable React hooks
+- `lib/` — Firebase, AI, auth, payments, and utility modules
+- `public/` — Static assets and PWA resources
+- `scripts/` — Maintenance and data scripts
+- `docs/` — Supporting documentation
 
-## 📁 Project Structure
+## Contributing and support
 
-```
-├── app/                    # Next.js app directory
-│   ├── api/               # API routes (auth-protected)
-│   ├── auth/              # Authentication pages
-│   ├── chat/              # Chat page with AI
-│   ├── games/             # Games page
-│   ├── therapists/        # Therapists page
-│   ├── journal/           # Journal page
-│   ├── mode/              # Analytics/Mode page
-│   ├── profile/           # Profile page
-│   ├── privacy/           # Privacy policy
-│   └── terms/             # Terms of service
-├── components/            # React components
-│   ├── ui/               # Base UI components
-│   ├── layout/           # Layout components
-│   ├── home/             # Home page components
-│   ├── games/            # Game components (lazy-loaded)
-│   └── therapists/       # Therapist components
-├── lib/                  # Utility libraries
-│   ├── firebase/         # Firebase config and helpers
-│   ├── ai/              # AI integration (OpenAI, ElevenLabs)
-│   ├── stripe/          # Stripe integration
-│   ├── auth/            # Auth verification
-│   └── analytics.ts     # Analytics helpers
-└── hooks/               # Custom React hooks
-```
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request. For changes involving authentication, consent, data sharing, or external integrations, include security and privacy implications in the pull request description.
 
-## 🔐 Security Features
+Use the repository issue templates for bugs and feature requests. Do not post private user information, API keys, or security vulnerabilities in public issues; see [SECURITY.md](SECURITY.md).
 
-- Server-side auth verification (`verifyAuth()`)
-- Protected API routes
-- Data deletion functionality
-- Consent toggles for therapist sharing
-- Crisis disclaimers
+## License
 
-## 🎨 Design System
+This project is licensed under the [MIT License](LICENSE).
 
-- **Theme**: Dark glassmorphic with neon accents
-- **Colors**: 
-  - Primary: Neon Blue (#00AEEF)
-  - Secondary: Neon Purple (#7A5FFF)
-  - Background: Dark gradient (#0B0C10 → #1C1E24)
-- **Components**: Glass cards with backdrop blur
-- **Animations**: Framer Motion for smooth transitions
-
-## 🚀 Performance
-
-- Lazy-loaded game components
-- Dynamic imports for heavy assets
-- Optimized images with Next.js Image
-- API response caching
-- Lighthouse scores: Perf 85+, A11y 90+, PWA 90+
-
-## 📝 Environment Variables
-
-See `.env.example` for all required environment variables.
-
-## 🐛 Troubleshooting
-
-- **Build errors**: Ensure all environment variables are set
-- **Firebase errors**: Verify Firebase config in `.env.local`
-- **OpenAI errors**: Check API key validity and credits
-- **Stripe errors**: Verify Stripe keys are correct
-- **Missing dev script**: Run `npm install` to ensure all dependencies are installed
-
-## 📄 License
-
-MIT
-
-## 💬 Support
-
-For issues and questions, please open an issue on GitHub.
-
----
-
-**Built with ❤️ for mental wellness**
+Built for more thoughtful preparation and communication around mental wellness.

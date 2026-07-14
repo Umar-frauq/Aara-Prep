@@ -1,5 +1,17 @@
 # AARA Prep - AI Therapist Platform
 
+## Project Status
+
+AARA Prep is an open-source project under active development. The repository is organized to make the project easier to understand, run locally, and contribute to.
+
+- [Contributing guide](CONTRIBUTING.md)
+- [Roadmap](ROADMAP.md)
+- [Security policy](SECURITY.md)
+- [Code of conduct](CODE_OF_CONDUCT.md)
+- [Changelog](CHANGELOG.md)
+
+> AARA Prep is not a therapist, diagnosis tool, medical-advice service, or crisis-care service. It is intended to support—not replace—qualified professional care.
+
 AARA is a pre-therapy and therapy companion that turns daily experiences into clear, shareable insights — so therapists understand users faster, and users feel understood. That’s it. No extra claims. No therapy replacement.
 
 ## 🚫 What AARA is NOT

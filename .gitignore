@@ -21,9 +21,16 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+build*_output.txt
+diagnose_output.txt
+tsc_errors.txt
+vercel-env-setup.txt
+*.tsbuildinfo
 
 # local env files
 .env*.local
+.env.vercel
 
 # vercel
 .vercel

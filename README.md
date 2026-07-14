@@ -1,4 +1,4 @@
-# AARA - AI Therapist Platform
+# AARA Prep - AI Therapist Platform
 
 AARA is a pre-therapy and therapy companion that turns daily experiences into clear, shareable insights — so therapists understand users faster, and users feel understood. That’s it. No extra claims. No therapy replacement.
 
